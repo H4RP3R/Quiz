@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"log"
+	"quizapp/quiz"
 
 	"github.com/hajimehoshi/ebiten/v2"
 	"github.com/hajimehoshi/ebiten/v2/ebitenutil"
@@ -31,6 +32,14 @@ func (g *Game) Layout(outsideWidth, outsideHeight int) (int, int) {
 func main() {
 	ebiten.SetWindowSize(screenWidth, screenHeight)
 	ebiten.SetWindowTitle("Quiz")
+
+	q := quiz.New("quiz/test_questions.json")
+
+	for _, v := range q.Questions {
+		fmt.Println(v)
+	}
+	fmt.Println(q.Size())
+
 	if err := ebiten.RunGame(&Game{}); err != nil {
 		log.Fatal(err)
 	}

@@ -1,4 +1,4 @@
-module quiz
+module quizapp
 
 go 1.23.3
 

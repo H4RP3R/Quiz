@@ -1,0 +1,50 @@
+[
+    {
+        "topic": "History",
+        "id": 1,
+        "body": "What year did the first world war start?",
+        "answers": [
+            {
+                "number": 1,
+                "body": "1914"
+            },
+            {
+                "number": 2,
+                "body": "1915"
+            },
+            {
+                "number": 3,
+                "body": "1916"
+            },
+            {
+                "number": 4,
+                "body": "1917"
+            }
+        ],
+        "right_answer": 1
+    },
+    {
+        "topic": "History",
+        "id": 2,
+        "body": "Who was the first President of the United States?",
+        "answers": [
+            {
+                "number": 1,
+                "body": "Thomas Jefferson"
+            },
+            {
+                "number": 2,
+                "body": "George Washington"
+            },
+            {
+                "number": 3,
+                "body": "Abraham Lincoln"
+            },
+            {
+                "number": 4,
+                "body": "Franklin D. Roosevelt"
+            }
+        ],
+        "right_answer": 2
+    }
+]
