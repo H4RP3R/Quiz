@@ -36,6 +36,7 @@ type Button struct {
 
 	Hover   bool
 	BorderW int
+	Action  func()
 }
 
 func (b *Button) Draw(dst *ebiten.Image) {
@@ -76,11 +77,11 @@ func (b *Button) Update() {
 
 func (b *Button) click() {
 	if inpututil.IsMouseButtonJustPressed(ebiten.MouseButton(ebiten.MouseButtonLeft)) && b.Hover {
-		log.Println("Click!")
+		b.Action()
 	}
 }
 
-func NewButton(w, h int, c color.RGBA, t string, posX, posY int) *Button {
+func NewButton(w, h int, c color.RGBA, t string, posX, posY int, a func()) *Button {
 	b := Button{
 		Color:      c,
 		Text:       t,
@@ -88,6 +89,7 @@ func NewButton(w, h int, c color.RGBA, t string, posX, posY int) *Button {
 		Heigh:      h,
 		Background: ebiten.NewImage(w, h),
 		Coord:      Coord{posX, posY},
+		Action:     a,
 	}
 
 	return &b

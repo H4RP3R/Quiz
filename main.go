@@ -11,6 +11,14 @@ import (
 	"github.com/hajimehoshi/ebiten/v2/ebitenutil"
 )
 
+type GameStatus string
+
+const (
+	MainMenu  GameStatus = "main menu"
+	Quiz      GameStatus = "quiz"
+	Statistic GameStatus = "statistic"
+)
+
 var (
 	screenWidth  int = 1024
 	screenHeight int = 768
@@ -18,27 +26,35 @@ var (
 
 type Game struct {
 	startButton *ui.Button
+	status      GameStatus
 }
 
 func NewGame() *Game {
 	g := &Game{}
-	g.startButton = ui.NewButton(180, 60, colors.Blue, "СТАРТ", screenWidth/2-90, 480)
+	g.startButton = ui.NewButton(180, 60, colors.Blue, "СТАРТ", screenWidth/2-90, 480, func() { g.status = Quiz })
+	g.status = MainMenu
 
 	return g
 }
 
 func (g *Game) Update() error {
-	g.startButton.Update()
+	switch g.status {
+	case MainMenu:
+		g.startButton.Update()
+	}
 	return nil
 }
 
 func (g *Game) Draw(screen *ebiten.Image) {
 	screen.Fill(colors.Teal)
 
-	infoStr := fmt.Sprintf("TPS: %.0f, FPS: %.0f", ebiten.ActualTPS(), ebiten.ActualFPS())
+	infoStr := fmt.Sprintf("TPS: %.0f, FPS: %.0f\nStatus: %s", ebiten.ActualTPS(), ebiten.ActualFPS(), g.status)
 	ebitenutil.DebugPrint(screen, infoStr)
 
-	g.startButton.Draw(screen)
+	switch g.status {
+	case MainMenu:
+		g.startButton.Draw(screen)
+	}
 }
 
 func (g *Game) Layout(outsideWidth, outsideHeight int) (int, int) {
