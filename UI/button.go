@@ -11,11 +11,13 @@ import (
 	"github.com/hajimehoshi/ebiten/v2/text/v2"
 	"github.com/hajimehoshi/ebiten/v2/vector"
 	"golang.org/x/image/font/gofont/gobold"
+	"golang.org/x/image/font/gofont/goregular"
 )
 
 var (
-	uiImage      *ebiten.Image
-	uiFaceSource *text.GoTextFaceSource
+	uiImage           *ebiten.Image
+	FaceSourceBold    *text.GoTextFaceSource
+	FaceSourceRegular *text.GoTextFaceSource
 )
 
 func init() {
@@ -23,7 +25,13 @@ func init() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	uiFaceSource = s
+	FaceSourceBold = s
+
+	s, err = text.NewGoTextFaceSource(bytes.NewReader(goregular.TTF))
+	if err != nil {
+		log.Fatal(err)
+	}
+	FaceSourceRegular = s
 }
 
 type Button struct {
@@ -48,7 +56,7 @@ func (b *Button) Draw(dst *ebiten.Image) {
 	opText.PrimaryAlign = text.AlignCenter
 	opText.SecondaryAlign = text.AlignCenter
 	text.Draw(b.Background, b.Text, &text.GoTextFace{
-		Source: uiFaceSource,
+		Source: FaceSourceBold,
 		Size:   48,
 	}, opText)
 
