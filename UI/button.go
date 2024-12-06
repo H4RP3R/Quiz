@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"image/color"
 	"log"
+	"quizapp/colors"
 
 	"github.com/hajimehoshi/ebiten/v2"
 	"github.com/hajimehoshi/ebiten/v2/inpututil"
@@ -15,10 +16,6 @@ import (
 var (
 	uiImage      *ebiten.Image
 	uiFaceSource *text.GoTextFaceSource
-)
-
-var (
-	Orange color.RGBA = color.RGBA{247, 153, 65, 255}
 )
 
 func init() {
@@ -58,7 +55,7 @@ func (b *Button) Draw(dst *ebiten.Image) {
 	opImg.GeoM.Translate(float64(b.X), float64(b.Y))
 
 	if b.Hover {
-		vector.StrokeRect(b.Background, 1, 1, float32(b.Width)-1, float32(b.Heigh)-1, 3, Orange, false)
+		vector.StrokeRect(b.Background, 1, 1, float32(b.Width)-1, float32(b.Heigh)-1, 3, colors.Orange, false)
 	}
 
 	dst.DrawImage(b.Background, opImg)

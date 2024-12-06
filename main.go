@@ -2,9 +2,9 @@ package main
 
 import (
 	"fmt"
-	"image/color"
 	"log"
 	ui "quizapp/UI"
+	"quizapp/colors"
 	"quizapp/quiz"
 
 	"github.com/hajimehoshi/ebiten/v2"
@@ -16,18 +16,13 @@ var (
 	screenHeight int = 768
 )
 
-var (
-	Teal color.RGBA = color.RGBA{35, 186, 155, 255}
-	Blue color.RGBA = color.RGBA{52, 73, 94, 255}
-)
-
 type Game struct {
 	startButton *ui.Button
 }
 
 func NewGame() *Game {
 	g := &Game{}
-	g.startButton = ui.NewButton(180, 60, Blue, "СТАРТ", screenWidth/2-90, 480)
+	g.startButton = ui.NewButton(180, 60, colors.Blue, "СТАРТ", screenWidth/2-90, 480)
 
 	return g
 }
@@ -38,7 +33,7 @@ func (g *Game) Update() error {
 }
 
 func (g *Game) Draw(screen *ebiten.Image) {
-	screen.Fill(Teal)
+	screen.Fill(colors.Teal)
 
 	infoStr := fmt.Sprintf("TPS: %.0f, FPS: %.0f", ebiten.ActualTPS(), ebiten.ActualFPS())
 	ebitenutil.DebugPrint(screen, infoStr)
