@@ -26,17 +26,21 @@ var (
 	screenHeight int = 768
 )
 
-var currentQuiz *quiz.Quiz
+var (
+	currentQuiz *quiz.Quiz
+	questionNum int = 0
+)
 
 type Game struct {
 	title       string
 	startButton *ui.Button
 	status      GameStatus
+	qScreens    []ui.QuestionScreen
 }
 
 func NewGame() *Game {
-	g := &Game{}
-	g.startButton = ui.NewButton(180, 60, colors.Blue, "СТАРТ", screenWidth/2-90, 480, func() { g.status = Quiz })
+	g := Game{}
+	g.startButton = ui.NewButton(180, 60, colors.Blue, "СТАРТ", ui.FaceSourceBold, 48, screenWidth/2-90, 480, func() { g.status = Quiz })
 	topic, err := currentQuiz.Topic()
 	if err != nil {
 		log.Fatal(err)
@@ -45,13 +49,22 @@ func NewGame() *Game {
 	g.title = fmt.Sprintf("Викторина по теме %q (%d вопросов)", topic, currentQuiz.Size())
 	g.status = MainMenu
 
-	return g
+	for _, q := range currentQuiz.Questions {
+		qScreen := ui.NewQuestionScreen(q, screenWidth, screenHeight)
+		g.qScreens = append(g.qScreens, *qScreen)
+	}
+
+	return &g
 }
 
 func (g *Game) Update() error {
 	switch g.status {
 	case MainMenu:
 		g.startButton.Update()
+	case Quiz:
+		if questionNum < currentQuiz.Size() {
+			g.qScreens[questionNum].Update()
+		}
 	}
 	return nil
 }
@@ -74,6 +87,10 @@ func (g *Game) Draw(screen *ebiten.Image) {
 			Size:   36,
 		}, opText)
 		g.startButton.Draw(screen)
+	case Quiz:
+		if questionNum < currentQuiz.Size() {
+			g.qScreens[questionNum].Draw(screen)
+		}
 	}
 }
 

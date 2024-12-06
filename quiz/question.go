@@ -9,7 +9,7 @@ package quiz
 //	Body: The text of the question itself.
 //	Answers: A list of possible answer variants.
 //	RightAnsw: The index of the correct answer in the Answers slice.
-type question struct {
+type Question struct {
 	Topic     string   `json:"topic"`
 	ID        int      `json:"id"`
 	Body      string   `json:"body"`

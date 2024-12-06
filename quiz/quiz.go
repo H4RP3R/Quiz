@@ -11,7 +11,7 @@ var ErrEmptyQuiz = fmt.Errorf("quiz does not contain any questions")
 
 // Quiz represents a collection of questions.
 type Quiz struct {
-	Questions []question
+	Questions []Question
 }
 
 // Size returns the number of questions in the quiz.

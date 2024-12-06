@@ -45,6 +45,9 @@ type Button struct {
 	Hover   bool
 	BorderW int
 	Action  func()
+
+	fs       *text.GoTextFaceSource
+	fontSize float64
 }
 
 func (b *Button) Draw(dst *ebiten.Image) {
@@ -56,8 +59,8 @@ func (b *Button) Draw(dst *ebiten.Image) {
 	opText.PrimaryAlign = text.AlignCenter
 	opText.SecondaryAlign = text.AlignCenter
 	text.Draw(b.Background, b.Text, &text.GoTextFace{
-		Source: FaceSourceBold,
-		Size:   48,
+		Source: b.fs,
+		Size:   b.fontSize,
 	}, opText)
 
 	opImg := &ebiten.DrawImageOptions{}
@@ -89,7 +92,7 @@ func (b *Button) click() {
 	}
 }
 
-func NewButton(w, h int, c color.RGBA, t string, posX, posY int, a func()) *Button {
+func NewButton(w, h int, c color.RGBA, t string, fs *text.GoTextFaceSource, s float64, posX, posY int, a func()) *Button {
 	b := Button{
 		Color:      c,
 		Text:       t,
@@ -98,6 +101,8 @@ func NewButton(w, h int, c color.RGBA, t string, posX, posY int, a func()) *Butt
 		Background: ebiten.NewImage(w, h),
 		Coord:      Coord{posX, posY},
 		Action:     a,
+		fs:         fs,
+		fontSize:   s,
 	}
 
 	return &b
