@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"image/color"
 	"log"
 	ui "quizapp/UI"
 	"quizapp/colors"
@@ -9,6 +10,7 @@ import (
 
 	"github.com/hajimehoshi/ebiten/v2"
 	"github.com/hajimehoshi/ebiten/v2/ebitenutil"
+	"github.com/hajimehoshi/ebiten/v2/text/v2"
 )
 
 type GameStatus string
@@ -24,7 +26,10 @@ var (
 	screenHeight int = 768
 )
 
+var currentQuiz *quiz.Quiz
+
 type Game struct {
+	title       string
 	startButton *ui.Button
 	status      GameStatus
 }
@@ -32,6 +37,12 @@ type Game struct {
 func NewGame() *Game {
 	g := &Game{}
 	g.startButton = ui.NewButton(180, 60, colors.Blue, "СТАРТ", screenWidth/2-90, 480, func() { g.status = Quiz })
+	topic, err := currentQuiz.Topic()
+	if err != nil {
+		log.Fatal(err)
+	}
+	// TODO: fix numbers endings
+	g.title = fmt.Sprintf("Викторина по теме %q (%d вопросов)", topic, currentQuiz.Size())
 	g.status = MainMenu
 
 	return g
@@ -53,6 +64,15 @@ func (g *Game) Draw(screen *ebiten.Image) {
 
 	switch g.status {
 	case MainMenu:
+		opText := &text.DrawOptions{}
+		opText.GeoM.Translate(float64(screenWidth)/2, 250)
+		opText.ColorScale.ScaleWithColor(color.White)
+		opText.PrimaryAlign = text.AlignCenter
+		opText.SecondaryAlign = text.AlignCenter
+		text.Draw(screen, g.title, &text.GoTextFace{
+			Source: ui.FaceSourceRegular,
+			Size:   36,
+		}, opText)
 		g.startButton.Draw(screen)
 	}
 }
@@ -61,16 +81,13 @@ func (g *Game) Layout(outsideWidth, outsideHeight int) (int, int) {
 	return screenWidth, screenHeight
 }
 
+func init() {
+	currentQuiz = quiz.New("quiz/test_questions.json")
+}
+
 func main() {
 	ebiten.SetWindowSize(screenWidth, screenHeight)
 	ebiten.SetWindowTitle("Quiz")
-
-	q := quiz.New("quiz/test_questions.json")
-
-	for _, v := range q.Questions {
-		fmt.Println(v)
-	}
-	fmt.Println(q.Size())
 
 	if err := ebiten.RunGame(NewGame()); err != nil {
 		log.Fatal(err)
