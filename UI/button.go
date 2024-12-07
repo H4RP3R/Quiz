@@ -40,7 +40,7 @@ type Button struct {
 	Color      color.RGBA
 	Text       string
 	Width      int
-	Heigh      int
+	Height     int
 	Coord
 
 	Hover   bool
@@ -56,7 +56,7 @@ func (b *Button) Draw(dst *ebiten.Image) {
 	b.Background.Fill(b.Color)
 
 	opText := &text.DrawOptions{}
-	opText.GeoM.Translate(float64(b.Width)/2, float64(b.Heigh)/2)
+	opText.GeoM.Translate(float64(b.Width)/2, float64(b.Height)/2)
 	opText.ColorScale.ScaleWithColor(color.White)
 	opText.PrimaryAlign = text.AlignCenter
 	opText.SecondaryAlign = text.AlignCenter
@@ -69,7 +69,7 @@ func (b *Button) Draw(dst *ebiten.Image) {
 	opImg.GeoM.Translate(float64(b.X), float64(b.Y))
 
 	if b.Hover {
-		vector.StrokeRect(b.Background, 1, 1, float32(b.Width)-1, float32(b.Heigh)-1, 3, colors.Orange, false)
+		vector.StrokeRect(b.Background, 1, 1, float32(b.Width)-1, float32(b.Height)-1, 3, colors.Orange, false)
 	}
 
 	dst.DrawImage(b.Background, opImg)
@@ -80,7 +80,7 @@ func (b *Button) Draw(dst *ebiten.Image) {
 func (b *Button) Update() {
 	x, y := ebiten.CursorPosition()
 
-	if x >= b.X && x <= b.X+b.Width && y >= b.Y && y <= b.Y+b.Heigh {
+	if x >= b.X && x <= b.X+b.Width && y >= b.Y && y <= b.Y+b.Height {
 		b.Hover = true
 	} else {
 		b.Hover = false
@@ -101,7 +101,7 @@ func NewButton(w, h int, c color.RGBA, t string, fs *text.GoTextFaceSource, s fl
 		Color:      c,
 		Text:       t,
 		Width:      w,
-		Heigh:      h,
+		Height:     h,
 		Background: ebiten.NewImage(w, h),
 		Coord:      Coord{posX, posY},
 		Action:     a,

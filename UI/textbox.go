@@ -13,7 +13,7 @@ type TextBox struct {
 	Color      color.RGBA
 	Text       string
 	Width      int
-	Heigh      int
+	Height     int
 	Coord
 }
 
@@ -23,7 +23,7 @@ func (tb *TextBox) Draw(dst *ebiten.Image) {
 	// TODO: text wrapping
 	opText := &text.DrawOptions{}
 	opText.ColorScale.ScaleWithColor(color.White)
-	opText.GeoM.Translate(float64(tb.Width)/2, float64(tb.Heigh)/2)
+	opText.GeoM.Translate(float64(tb.Width)/2, float64(tb.Height)/2)
 	opText.ColorScale.ScaleWithColor(color.White)
 	opText.PrimaryAlign = text.AlignCenter
 	opText.SecondaryAlign = text.AlignCenter
@@ -44,7 +44,7 @@ func NewTextBox(w, h int, c color.RGBA, t string, posX, posY int) *TextBox {
 		Color:      c,
 		Text:       t,
 		Width:      w,
-		Heigh:      h,
+		Height:     h,
 		Coord:      Coord{posX, posY},
 	}
 
