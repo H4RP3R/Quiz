@@ -7,6 +7,7 @@ import (
 	"github.com/hajimehoshi/ebiten/v2/text/v2"
 )
 
+// TextBox represents graphical text box with background.
 type TextBox struct {
 	Background *ebiten.Image
 	Color      color.RGBA
@@ -16,6 +17,7 @@ type TextBox struct {
 	Coord
 }
 
+// Draw renders the text box on the destination image.
 func (tb *TextBox) Draw(dst *ebiten.Image) {
 	tb.Background.Fill(tb.Color)
 	// TODO: text wrapping

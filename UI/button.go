@@ -34,6 +34,7 @@ func init() {
 	FaceSourceRegular = s
 }
 
+// Button represents customizable UI element that triggers specified action.
 type Button struct {
 	Background *ebiten.Image
 	Color      color.RGBA
@@ -50,6 +51,7 @@ type Button struct {
 	fontSize float64
 }
 
+// Draw renders button on the destination image.
 func (b *Button) Draw(dst *ebiten.Image) {
 	b.Background.Fill(b.Color)
 
@@ -74,6 +76,7 @@ func (b *Button) Draw(dst *ebiten.Image) {
 
 }
 
+// Update updates button's state based on the current cursor position.
 func (b *Button) Update() {
 	x, y := ebiten.CursorPosition()
 
@@ -86,6 +89,7 @@ func (b *Button) Update() {
 	b.click()
 }
 
+// click checks whether mouse cursor is over the button and handles the button click event
 func (b *Button) click() {
 	if inpututil.IsMouseButtonJustPressed(ebiten.MouseButton(ebiten.MouseButtonLeft)) && b.Hover {
 		b.Action()

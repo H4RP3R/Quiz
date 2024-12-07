@@ -8,14 +8,18 @@ import (
 	"github.com/hajimehoshi/ebiten/v2"
 )
 
+// QuestionScreen displays a question and its options.
 type QuestionScreen struct {
-	TB   *TextBox
+	// TB is the textbox that displays the question.
+	TB *TextBox
+	// Opt1, Opt2, ... are the buttons representing the question options.
 	Opt1 *Button
 	Opt2 *Button
 	Opt3 *Button
 	Opt4 *Button
 }
 
+// Draw renders the question screen on the destination image.
 func (qs *QuestionScreen) Draw(dst *ebiten.Image) {
 	qs.TB.Draw(dst)
 	qs.Opt1.Draw(dst)
@@ -24,6 +28,7 @@ func (qs *QuestionScreen) Draw(dst *ebiten.Image) {
 	qs.Opt4.Draw(dst)
 }
 
+// Update updates the state of the question screen based on user input.
 func (qs *QuestionScreen) Update() {
 	qs.Opt1.Update()
 	qs.Opt2.Update()
