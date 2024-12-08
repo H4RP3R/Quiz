@@ -36,6 +36,8 @@ type Game struct {
 	startButton *ui.Button
 	status      GameStatus
 	qScreens    []ui.QuestionScreen
+
+	correctAnswers int
 }
 
 func NewGame() *Game {
@@ -53,6 +55,28 @@ func NewGame() *Game {
 		qScreen := ui.NewQuestionScreen(q, screenWidth, screenHeight)
 		g.qScreens = append(g.qScreens, *qScreen)
 	}
+
+	// Listen for question counter signals and process user answers. The sender
+	// code ensures that the question counter signal is sent before the option
+	// value, so we can safely receive from OptionChan after receiving the signal.
+	go func() {
+		for {
+			// Wait for the next question counter signal.
+			<-ui.QuestionCounterChan
+			if option, ok := <-ui.OptionChan; ok {
+				// Check if the user's answer is correct.
+				if option == currentQuiz.Questions[questionNum].RightAnsw {
+					g.correctAnswers++
+					fmt.Printf("answ: %d", g.correctAnswers)
+				}
+			}
+			// Move on to the next question.
+			questionNum++
+			if questionNum == currentQuiz.Size() {
+				g.status = Statistic
+			}
+		}
+	}()
 
 	return &g
 }
