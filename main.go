@@ -32,17 +32,26 @@ var (
 )
 
 type Game struct {
-	title       string
-	startButton *ui.Button
-	status      GameStatus
-	qScreens    []ui.QuestionScreen
+	title           string
+	startButton     *ui.Button
+	startOverButton *ui.Button
+	status          GameStatus
+	qScreens        []ui.QuestionScreen
 
 	correctAnswers int
+	resultStr      string
+}
+
+func (g *Game) reset() {
+	g.status = MainMenu
+	g.correctAnswers = 0
+	questionNum = 0
 }
 
 func NewGame() *Game {
 	g := Game{}
 	g.startButton = ui.NewButton(180, 60, colors.Blue, "СТАРТ", ui.FaceSourceBold, 48, screenWidth/2-90, 480, func() { g.status = Quiz })
+	g.startOverButton = ui.NewButton(240, 60, colors.Blue, "ПОВТОРИТЬ", ui.FaceSourceBold, 36, screenWidth/2-90, 480, func() { g.reset() })
 	topic, err := currentQuiz.Topic()
 	if err != nil {
 		log.Fatal(err)
@@ -56,6 +65,9 @@ func NewGame() *Game {
 		g.qScreens = append(g.qScreens, *qScreen)
 	}
 
+	g.correctAnswers = 0
+	g.resultStr = "Правильных ответов: %d из %d"
+
 	// Listen for question counter signals and process user answers. The sender
 	// code ensures that the question counter signal is sent before the option
 	// value, so we can safely receive from OptionChan after receiving the signal.
@@ -67,7 +79,6 @@ func NewGame() *Game {
 				// Check if the user's answer is correct.
 				if option == currentQuiz.Questions[questionNum].RightAnsw {
 					g.correctAnswers++
-					fmt.Printf("answ: %d", g.correctAnswers)
 				}
 			}
 			// Move on to the next question.
@@ -89,6 +100,8 @@ func (g *Game) Update() error {
 		if questionNum < currentQuiz.Size() {
 			g.qScreens[questionNum].Update()
 		}
+	case Statistic:
+		g.startOverButton.Update()
 	}
 	return nil
 }
@@ -115,6 +128,18 @@ func (g *Game) Draw(screen *ebiten.Image) {
 		if questionNum < currentQuiz.Size() {
 			g.qScreens[questionNum].Draw(screen)
 		}
+	case Statistic:
+		opText := &text.DrawOptions{}
+		opText.GeoM.Translate(float64(screenWidth)/2, 250)
+		opText.ColorScale.ScaleWithColor(color.White)
+		opText.PrimaryAlign = text.AlignCenter
+		opText.SecondaryAlign = text.AlignCenter
+		text.Draw(screen, fmt.Sprintf(g.resultStr, g.correctAnswers, currentQuiz.Size()),
+			&text.GoTextFace{
+				Source: ui.FaceSourceRegular,
+				Size:   36,
+			}, opText)
+		g.startOverButton.Draw(screen)
 	}
 }
 
