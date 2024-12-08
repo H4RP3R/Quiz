@@ -2,9 +2,11 @@ package ui
 
 import (
 	"image/color"
+	"quizapp/colors"
 
 	"github.com/hajimehoshi/ebiten/v2"
 	"github.com/hajimehoshi/ebiten/v2/text/v2"
+	"github.com/hajimehoshi/ebiten/v2/vector"
 )
 
 // TextBox represents graphical text box with background.
@@ -35,6 +37,8 @@ func (tb *TextBox) Draw(dst *ebiten.Image) {
 
 	opImg := &ebiten.DrawImageOptions{}
 	opImg.GeoM.Translate(float64(tb.X), float64(tb.Y))
+
+	vector.StrokeRect(tb.Background, 8, 8, float32(tb.Width)-16, float32(tb.Height)-16, 3, colors.Teal, false)
 	dst.DrawImage(tb.Background, opImg)
 }
 
