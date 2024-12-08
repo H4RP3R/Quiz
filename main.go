@@ -57,7 +57,7 @@ func NewGame() *Game {
 		log.Fatal(err)
 	}
 	// TODO: fix numbers endings
-	g.title = fmt.Sprintf("Викторина по теме %q (%d вопросов)", topic, currentQuiz.Size())
+	g.title = fmt.Sprintf("Викторина по теме\n%q\n(%d вопросов)", topic, currentQuiz.Size())
 	g.status = MainMenu
 
 	for _, q := range currentQuiz.Questions {
@@ -119,6 +119,7 @@ func (g *Game) Draw(screen *ebiten.Image) {
 		opText.ColorScale.ScaleWithColor(color.White)
 		opText.PrimaryAlign = text.AlignCenter
 		opText.SecondaryAlign = text.AlignCenter
+		opText.LineSpacing = 48
 		text.Draw(screen, g.title, &text.GoTextFace{
 			Source: ui.FaceSourceRegular,
 			Size:   36,
@@ -148,7 +149,7 @@ func (g *Game) Layout(outsideWidth, outsideHeight int) (int, int) {
 }
 
 func init() {
-	currentQuiz = quiz.New("quiz/test_questions.json")
+	currentQuiz = quiz.New("questions.json")
 }
 
 func main() {
