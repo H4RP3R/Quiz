@@ -60,6 +60,7 @@ func (b *Button) Draw(dst *ebiten.Image) {
 	opText.ColorScale.ScaleWithColor(color.White)
 	opText.PrimaryAlign = text.AlignCenter
 	opText.SecondaryAlign = text.AlignCenter
+	opText.LineSpacing = 26
 	text.Draw(b.Background, b.Text, &text.GoTextFace{
 		Source: b.fs,
 		Size:   b.fontSize,

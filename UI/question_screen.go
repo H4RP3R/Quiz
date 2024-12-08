@@ -49,15 +49,13 @@ func NewQuestionScreen(q quiz.Question, scrW, scrH int) *QuestionScreen {
 	w, h := 880, 300
 	qs := QuestionScreen{
 		TB: NewTextBox(w, h, colors.Black, q.Body, scrW/2-w/2, 80),
-		Opt1: NewButton(400, 80, colors.Blue, q.Answers[0].Body, FaceSourceRegular, 24, 72, 440,
-			// Send question counter signal and option value in a strict order to ensure
-			// that the receiver code receives the signal before trying to receive the option value.
+		Opt1: NewButton(440, 80, colors.Blue, q.Answers[0].Body, FaceSourceRegular, 18, 72, 440,
 			func() { QuestionCounterChan <- struct{}{}; OptionChan <- 1 }),
-		Opt2: NewButton(400, 80, colors.Blue, q.Answers[1].Body, FaceSourceRegular, 24, 552, 440,
+		Opt2: NewButton(440, 80, colors.Blue, q.Answers[1].Body, FaceSourceRegular, 18, 532, 440,
 			func() { QuestionCounterChan <- struct{}{}; OptionChan <- 2 }),
-		Opt3: NewButton(400, 80, colors.Blue, q.Answers[2].Body, FaceSourceRegular, 24, 72, 560,
+		Opt3: NewButton(440, 80, colors.Blue, q.Answers[2].Body, FaceSourceRegular, 18, 72, 540,
 			func() { QuestionCounterChan <- struct{}{}; OptionChan <- 3 }),
-		Opt4: NewButton(400, 80, colors.Blue, q.Answers[3].Body, FaceSourceRegular, 24, 552, 560,
+		Opt4: NewButton(440, 80, colors.Blue, q.Answers[3].Body, FaceSourceRegular, 18, 532, 540,
 			func() { QuestionCounterChan <- struct{}{}; OptionChan <- 4 }),
 	}
 
