@@ -3,11 +3,11 @@ package quiz
 import (
 	"encoding/json"
 	"fmt"
-	"log"
 	"os"
 )
 
 var ErrEmptyQuiz = fmt.Errorf("quiz does not contain any questions")
+var ErrQuestionsJson = fmt.Errorf("can't load file 'questions.json'")
 
 // Quiz represents a collection of questions.
 type Quiz struct {
@@ -30,22 +30,23 @@ func (q *Quiz) Topic() (string, error) {
 }
 
 // load loads the quiz from a JSON file at the given path.
-func (q *Quiz) load(path string) {
+func (q *Quiz) load(path string) error {
 	f, err := os.Open(path)
 	if err != nil {
-		log.Fatal(err)
+		return err
 	}
 	defer f.Close()
 
 	err = json.NewDecoder(f).Decode(&q.Questions)
-	if err != nil {
-		log.Fatal(err)
-	}
+	return err
 }
 
-func New(jsonPath string) *Quiz {
+func New(jsonPath string) (*Quiz, error) {
 	q := Quiz{}
-	q.load(jsonPath)
+	err := q.load(jsonPath)
+	if err != nil {
+		return &q, fmt.Errorf("%w: %v", ErrQuestionsJson, err)
+	}
 
-	return &q
+	return &q, nil
 }

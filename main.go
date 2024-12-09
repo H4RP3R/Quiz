@@ -149,7 +149,11 @@ func (g *Game) Layout(outsideWidth, outsideHeight int) (int, int) {
 }
 
 func init() {
-	currentQuiz = quiz.New("questions.json")
+	var err error
+	currentQuiz, err = quiz.New("questions.json")
+	if err != nil {
+		log.Fatal(err)
+	}
 }
 
 func main() {
